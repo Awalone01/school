@@ -1,12 +1,11 @@
 package ru.hogwarts.school.controller;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.service.FacultyService;
 
 @RestController
-@RequestMapping("facultys")
+@RequestMapping("faculty")
 public class FacultyController {
 
     private final FacultyService facultyService;

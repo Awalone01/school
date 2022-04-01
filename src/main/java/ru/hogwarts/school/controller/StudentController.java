@@ -1,16 +1,15 @@
 package ru.hogwarts.school.controller;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
 @RestController
-@RequestMapping("students")
+@RequestMapping("student")
 public class StudentController {
 
     private final StudentService studentService;
-    
+
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
@@ -33,5 +32,10 @@ public class StudentController {
     @DeleteMapping("{id}")
     public Student deleteStudent(@PathVariable Long id) {
         return studentService.deleteStudent(id);
+    }
+
+    @GetMapping("{age}")
+    public Student getStudentsByAge(@PathVariable int age) {
+        return studentService.getAgeStudents(age);
     }
 }
