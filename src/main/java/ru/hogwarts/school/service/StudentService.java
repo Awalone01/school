@@ -1,10 +1,13 @@
 package ru.hogwarts.school.service;
 
 import org.springframework.stereotype.Service;
+import org.w3c.dom.stylesheets.LinkStyle;
 import ru.hogwarts.school.model.Student;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -31,15 +34,22 @@ public class StudentService {
         return students.remove(id);
     }
 
-    public HashMap<Long, Student> getAgeStudents(int age) {
-        HashMap<Long, Student> filteredMap = new HashMap<>();
-        for (Map.Entry student : students.entrySet()) {
-            if (student.getValue().equals(age)) {
-                filteredMap.put((Long) student.getKey(), (Student) student.getValue());
-            }
-        }
-        return filteredMap;
+    public Student getAgeStudents(int age) {
+        List<Student> studentList = students.entrySet().stream().
+                flatMap(students -> students.getValue().getAge(age)).collect(Collectors.toList());
+        return (Student) studentList;
     }
+
+//    public HashMap<Long, Student> getAgeStudents(int age) {
+//        HashMap<Long, Student> filteredMap = new HashMap<>();
+//        for (Map.Entry student : students.entrySet()) {
+//            if (student.getValue().equals(age)) {
+//                filteredMap.put((Long) student.getKey(), (Student) student.getValue());
+//            }
+//        }
+//        return filteredMap;
+//    }
+/////////////////////////////////////////////////////////
 //        Student newStudent = new Student();
 //        for (int i = 0; i < students.size(); i++) {
 //            if (age == students.get().getAge()) {
