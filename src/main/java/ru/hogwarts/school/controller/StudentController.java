@@ -4,8 +4,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
-import java.util.HashMap;
-
 @RestController
 @RequestMapping("student")
 public class StudentController {
@@ -37,7 +35,7 @@ public class StudentController {
     }
 
     @GetMapping("{age}")
-    public HashMap<Long, Student> getStudentsByAge(@PathVariable int age) {
+    public Student getStudentsByAge(@PathVariable int age) {
         return studentService.getAgeStudents(age);
     }
 }

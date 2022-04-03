@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.w3c.dom.stylesheets.LinkStyle;
 import ru.hogwarts.school.model.Student;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,13 +35,21 @@ public class StudentService {
         return students.remove(id);
     }
 
-    public Student getAgeStudents(int age) {
-
-        Map<Long, Student> filteredMap = students.entrySet().stream().
-                filter(students -> students.getValue().getAge()).
-                collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        return filteredMap;
+    public List<Student> getAllStudents() {
+        return new ArrayList<>(students.values());
     }
+
+    public Student getAgeStudents(int age) {
+        return (Student) getAllStudents().stream().
+                filter(s -> s.getAge() == age);
+    }
+
+
+//        Map<Long, Student> filteredMap = students.entrySet().stream().
+//                filter(students -> students.getValue().getAge()).
+//                collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+//        return filteredMap;
+        ///////////////////////////////////////////////////////////////////////////
 //        List<Student> studentList = students.entrySet().stream().
 //                flatMap(students -> students.getValue().getAge(age)).collect(Collectors.toList());
 //        return (Student) studentList;
