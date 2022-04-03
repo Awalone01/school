@@ -35,11 +35,17 @@ public class StudentService {
     }
 
     public Student getAgeStudents(int age) {
-        List<Student> studentList = students.entrySet().stream().
-                flatMap(students -> students.getValue().getAge(age)).collect(Collectors.toList());
-        return (Student) studentList;
-    }
 
+        Map<Long, Student> filteredMap = students.entrySet().stream().
+                filter(students -> students.getValue().getAge()).
+                collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return filteredMap;
+    }
+//        List<Student> studentList = students.entrySet().stream().
+//                flatMap(students -> students.getValue().getAge(age)).collect(Collectors.toList());
+//        return (Student) studentList;
+//    }
+///////////////////////////////////////////////////////////
 //    public HashMap<Long, Student> getAgeStudents(int age) {
 //        HashMap<Long, Student> filteredMap = new HashMap<>();
 //        for (Map.Entry student : students.entrySet()) {
