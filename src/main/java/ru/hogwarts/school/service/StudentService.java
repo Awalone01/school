@@ -3,8 +3,8 @@ package ru.hogwarts.school.service;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Student;
 
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class StudentService {
@@ -31,13 +31,19 @@ public class StudentService {
         return students.remove(id);
     }
 
-    public Student getAgeStudents(int age) {
-
-//        Student newStudent = new Student();
-        for (int i = 0; i < students.size(); i++) {
-            if (age == students.get().getAge()) {
-                return Collection<Student>.;
+    public HashMap<Long, Student> getAgeStudents(int age) {
+        HashMap<Long, Student> filteredMap = new HashMap<>();
+        for (Map.Entry student : students.entrySet()) {
+            if (student.getValue().equals(age)) {
+                filteredMap.put((Long) student.getKey(), (Student) student.getValue());
             }
         }
+        return filteredMap;
     }
-}
+//        Student newStudent = new Student();
+//        for (int i = 0; i < students.size(); i++) {
+//            if (age == students.get().getAge()) {
+//                return Collection<Student>.;
+//            }
+//        }
+    }
