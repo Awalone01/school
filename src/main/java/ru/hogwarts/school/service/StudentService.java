@@ -1,19 +1,17 @@
 package ru.hogwarts.school.service;
 
 import org.springframework.stereotype.Service;
-import org.w3c.dom.stylesheets.LinkStyle;
 import ru.hogwarts.school.model.Student;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
 
-    private final HashMap<Long, Student>  students = new HashMap<>();
+    private final HashMap<Long, Student> students = new HashMap<>();
     private long lastId = 0;
 
     public Student createStudent(Student student) {
@@ -39,10 +37,12 @@ public class StudentService {
         return new ArrayList<>(students.values());
     }
 
-    public Student getAgeStudents(int age) {
-        return (Student) getAllStudents().stream().
-                filter(s -> s.getAge() == age);
+    public List<Student> getAgeStudents(int age) {
+        return getAllStudents().stream().
+                filter(s -> s.getAge() == age).collect(Collectors.toList());
     }
+}
+
 
 
 //        Map<Long, Student> filteredMap = students.entrySet().stream().
@@ -71,4 +71,3 @@ public class StudentService {
 //                return Collection<Student>.;
 //            }
 //        }
-    }
