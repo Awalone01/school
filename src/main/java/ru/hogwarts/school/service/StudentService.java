@@ -37,13 +37,13 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
-    public List<Student> getAgeStudents(int age) {
-        return getAllStudents().stream().
-                filter(s -> s.getAge() == age).
-                collect(Collectors.toList());
-    }
+//    public List<Student> getAgeStudents(int age) {
+//        return getAllStudents().stream().
+//                filter(s -> s.getAge() == age).
+//                collect(Collectors.toList());
+//    }
 //
-//     public Collection<Student> findByAgeBetween(int min, int max) {
-//         return studentRepository.findByAgeBetween(min, max);
-//     }
+     public List<Student> findByAgeBetween(Integer min, Integer max) {
+         return studentRepository.findByAgeBetween(min, max);
+     }
 }
