@@ -1,8 +1,12 @@
 package ru.hogwarts.school.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -21,6 +25,9 @@ public class Faculty {
         this.color = color;
     }
 
+    @JsonManagedReference
+    @OneToMany(mappedBy = "faculty")
+    private List<Student> students;
     public Faculty() {
 
     }

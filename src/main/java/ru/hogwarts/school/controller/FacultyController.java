@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.service.FacultyService;
 
-import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("faculty")
@@ -33,7 +33,7 @@ public class FacultyController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Faculty> getStudent(@PathVariable Long id) {
+    public ResponseEntity<Faculty> getFaculty(@PathVariable Long id) {
         Faculty faculty = facultyService.findFaculty(id);
         if (faculty == null) {
             return ResponseEntity.notFound().build();
@@ -47,8 +47,13 @@ public class FacultyController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("{color}")
-    public List<Faculty> getFacultiesByColor(@PathVariable String color) {
-        return facultyService.getFacultiesByColor(color);
+    @GetMapping
+    public Set<Faculty> getFacultiesByColorOrName(
+            @RequestParam(required = false) String color,
+            @RequestParam(required = false) String name) {
+        if (name == null) {
+            return facultyService.getByColor(color);
+        }
+        return facultyService.findByColorOrNameIgnoreCase(color, name);
     }
 }
