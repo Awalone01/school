@@ -7,8 +7,6 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 @RestController
