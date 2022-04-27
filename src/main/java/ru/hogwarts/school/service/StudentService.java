@@ -4,8 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Service
 public class StudentService {
@@ -32,13 +31,11 @@ public class StudentService {
         studentRepository.deleteById(id);
     }
 
-    public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+    public Set<Student> getAgeStudents(int age) {
+        return studentRepository.findByAge(age);
     }
 
-    public List<Student> getAgeStudents(int age) {
-        return getAllStudents().stream().
-                filter(s -> s.getAge() == age).
-                collect(Collectors.toList());
-    }
+     public Set<Student> findByAgeBetween(Integer min, Integer max) {
+         return studentRepository.findByAgeBetween(min, max);
+     }
 }

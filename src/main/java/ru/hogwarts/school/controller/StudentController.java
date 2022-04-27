@@ -3,10 +3,11 @@ package ru.hogwarts.school.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
-import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("student")
@@ -33,12 +34,12 @@ public class StudentController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Student> getStudent(@PathVariable Long id) {
+    public Student getStudent(@PathVariable Long id) {
         Student student = studentService.findStudent(id);
         if (student == null) {
-            return ResponseEntity.notFound().build();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        return ResponseEntity.ok(student);
+        return student;
     }
 
     @DeleteMapping("{id}")
@@ -47,8 +48,15 @@ public class StudentController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("{age}")
-    public List<Student> getStudentsByAge(@PathVariable int age) {
+    @GetMapping(params = {"age"})
+    public Set<Student> getStudentsByAge(@RequestParam(required = false) Integer age) {
         return studentService.getAgeStudents(age);
+    }
+
+    @GetMapping(params = {"minAge", "maxAge"})
+    public Set<Student> getStudentByAgeBetweenMinAndMax(
+            @RequestParam(required = false) Integer min,
+            @RequestParam(required = false) Integer max) {
+        return studentService.findByAgeBetween(min, max);
     }
 }
