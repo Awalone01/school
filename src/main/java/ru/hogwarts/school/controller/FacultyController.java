@@ -52,7 +52,7 @@ public class FacultyController {
             @RequestParam(required = false) String color,
             @RequestParam(required = false) String name) {
         if (name == null) {
-            return facultyService.getByColor(color);
+            return facultyService.getByColorIgnoreCase(color);
         }
         return facultyService.findByColorOrNameIgnoreCase(color, name);
     }

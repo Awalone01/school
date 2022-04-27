@@ -7,7 +7,7 @@ import java.util.Set;
 
 public interface FacultyRepository extends JpaRepository<Faculty, Long> {
 
-    Set<Faculty> getByColor(String color);
+    Set<Faculty> getByColorIgnoreCase(String color);
 
     Set<Faculty> getByColorOrNameIgnoreCase(String color, String name);
 }
