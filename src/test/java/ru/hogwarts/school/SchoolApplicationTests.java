@@ -39,28 +39,19 @@ class SchoolApplicationTests {
 				.isNotNull();
 	}
 
-//	@Test
-//	public void testGetStudent() throws Exception {
-//		Student student = new Student();
-//		student.setId(1L);
-//		student.setName("Bob");
-//		student.setAge(13);
-//
-//		Assertions.
-//				assertThat(this.testRestTemplate.getForObject("http://localhost:" + port + "/id" +  student, String.class))
-//				.isNotNull();
-//	}
+	@Test
+	public void testGetStudent() throws Exception {
+
+		Assertions.
+				assertThat(this.testRestTemplate.getForObject("http://localhost:" + port + "/id", String.class))
+				.isNotNull();
+	}
 
 	@Test
 	public void testDeleteStudent() throws Exception {
 		Student student = new Student(1L, "Bob", 13);
-//		student.setId(1L);
-//		student.setName("Bob");
-//		student.setAge(13);
 
 		testRestTemplate.delete("http://localhost:" + port + "/id", student, String.class);
-//		Assertions.
-//				assertThat(this.testRestTemplate.delete("http://localhost:" + port + "/id", student, String.class));
 	}
 
 }
