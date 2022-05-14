@@ -170,6 +170,4 @@ public class FacultyApplicationTests {
                 .andExpect(jsonPath("$.color").value(color));
 
     }
-
-    //java.lang.IllegalStateException: Failed to load ApplicationContext
 }
