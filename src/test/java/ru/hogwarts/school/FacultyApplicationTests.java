@@ -1,5 +1,6 @@
 package ru.hogwarts.school;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -9,21 +10,25 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ru.hogwarts.school.controller.FacultyController;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.service.FacultyService;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest
+@WebMvcTest(FacultyController.class)
 public class FacultyApplicationTests {
 
     @Autowired
@@ -37,6 +42,9 @@ public class FacultyApplicationTests {
 
     @InjectMocks
     private FacultyController facultyController;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Test
     public void saveFacultyTest() throws Exception {
@@ -74,6 +82,7 @@ public class FacultyApplicationTests {
         String newColor = "green";
 
         JSONObject facultyObject = new JSONObject();
+        facultyObject.put("id", id);
         facultyObject.put("name", newName);
         facultyObject.put("color", newColor);
 
@@ -81,8 +90,8 @@ public class FacultyApplicationTests {
 
         Faculty putFaculty = new Faculty(id, newName, newColor);
 
-        when(facultyRepository.save(any(Faculty.class))).thenReturn(putFaculty);
         when(facultyRepository.findById(id)).thenReturn(Optional.of(faculty));
+        when(facultyRepository.save(any(Faculty.class))).thenReturn(putFaculty);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/faculty")
@@ -126,48 +135,54 @@ public class FacultyApplicationTests {
         String name = "Gryffindor";
         String color = "red";
 
-        JSONObject facultyObject = new JSONObject();
-        facultyObject.put("name", name);
-        facultyObject.put("color", color);
-
-        Faculty faculty = new Faculty(id, name, color);
+        Faculty faculty = new Faculty();
+        faculty.setId(id);
+        faculty.setName(name);
+        faculty.setColor(color);
 
         when(facultyRepository.getById(id)).thenReturn(faculty);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .delete("/faculty/{id}", id)
-                        .content(facultyObject.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(id))
-                .andExpect(jsonPath("$.name").value(name))
-                .andExpect(jsonPath("$.color").value(color));
+                .andExpect(status().isOk());
+
+        verify(facultyRepository, atLeastOnce()).deleteById(id);
     }
 
     @Test
     public void getFacultyByColorOrNameIgnoreCaseTest() throws Exception {
-        Long id = 1L;
-        String name = "Gryffindor";
-        String color = "red";
+        Long id1 = 1L;
+        String name1 = "Gryffindor";
+        String color1 = "red";
+        String color1IgnoreCase = "Red";
 
-        JSONObject facultyObject = new JSONObject();
-        facultyObject.put("name", name);
-        facultyObject.put("color", color);
+        Long id2 = 2L;
+        String name2 = "Slytherin";
+        String name2IgnoreCase = "SlytheRIN";
+        String color2 = "green";
 
-        Faculty faculty = new Faculty(id, name, color);
+//        JSONObject facultyObject = new JSONObject();
+//        facultyObject.put("name", name);
+//        facultyObject.put("color", color);
 
-        when(facultyRepository.getByColorOrNameIgnoreCase(color, name)).thenReturn((Set.of(faculty)));
+        Faculty faculty1 = new Faculty(id1, name1, color1);
+
+        Faculty faculty2 = new Faculty(id2, name2, color2);
+
+        when(facultyRepository.getByColorOrNameIgnoreCase(color1IgnoreCase, name2IgnoreCase)).thenReturn((Set.of(faculty1, faculty2)));
+
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/faculty")
-                        .content(facultyObject.toString())
+//                        .content(facultyObject.toString())
+                        .queryParam("color", color1IgnoreCase)
+                        .queryParam("name", name2IgnoreCase)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(id))
-                .andExpect(jsonPath("$.name").value(name))
-                .andExpect(jsonPath("$.color").value(color));
+                .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(List.of(faculty1, faculty2))));
 
     }
 }
