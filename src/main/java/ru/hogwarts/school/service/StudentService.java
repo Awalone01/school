@@ -1,9 +1,11 @@
 package ru.hogwarts.school.service;
 
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.model.AllStudents;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -37,5 +39,9 @@ public class StudentService {
 
      public Set<Student> findByAgeBetween(Integer min, Integer max) {
          return studentRepository.findByAgeBetween(min, max);
+     }
+
+     public List<AllStudents> getAllStudents() {
+         return studentRepository.getAllStudents();
      }
 }
