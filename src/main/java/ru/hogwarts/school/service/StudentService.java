@@ -44,4 +44,10 @@ public class StudentService {
      public List<AllStudents> getAllStudents() {
          return studentRepository.getAllStudents();
      }
+
+     public List<AllStudents> getAverageAgeByStudents() {
+         return studentRepository.getAverageAgeByStudents();
+     }
+
+
 }

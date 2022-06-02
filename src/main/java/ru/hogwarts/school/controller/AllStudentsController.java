@@ -20,4 +20,10 @@ public class AllStudentsController {
     public List<AllStudents> getAllStudents() {
         return studentService.getAllStudents();
     }
+
+    @GetMapping("/AVG-age")
+    public List<AllStudents> getAverageAgeByStudents() {
+        return studentService.getAverageAgeByStudents();
+    }
+
 }
