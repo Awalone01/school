@@ -11,6 +11,7 @@ import javax.transaction.Transactional;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Objects;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
@@ -18,6 +19,8 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @Service
 @Transactional
 public class AvatarService {
+
+    private static final int IMAGE_BLOCK_BUFFER_SIZE = 1024;
 
     @Value("${path.to.avatars.folder}")
     private String avatarsDir;
@@ -30,19 +33,17 @@ public class AvatarService {
         this.avatarRepository = avatarRepository;
     }
 
-    public void uploadAvatar(Long studentId, MultipartFile avatarFile) throws IOException {
+    public Long uploadAvatar(Long studentId, MultipartFile avatarFile) throws IOException {
         Student student = studentService.findStudent(studentId);
         Path filePath = Path.of(avatarsDir, student + "." +
-                getExtensions(Objects.requireNonNull(avatarFile.getOriginalFilename())));
+                getExtensions(avatarFile.getOriginalFilename()));
 
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
 
         try (
-                InputStream is = avatarFile.getInputStream();
-                OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
-                BufferedInputStream bis = new BufferedInputStream(is, 1024);
-                BufferedOutputStream bos = new BufferedOutputStream(os, 1024)
+                BufferedInputStream bis = new BufferedInputStream(avatarFile.getInputStream(), IMAGE_BLOCK_BUFFER_SIZE);
+                BufferedOutputStream bos = new BufferedOutputStream(Files.newOutputStream(filePath, StandardOpenOption.CREATE_NEW), IMAGE_BLOCK_BUFFER_SIZE)
         ) {
             bis.transferTo(bos);
         }
@@ -54,11 +55,11 @@ public class AvatarService {
         avatar.setMediaType(avatarFile.getContentType());
         avatar.setData(avatarFile.getBytes());
 
-        avatarRepository.save(avatar);
+        return avatarRepository.save(avatar).getId();
     }
 
     public Avatar findAvatar(Long id) {
-        return avatarRepository.getById(id);
+        return avatarRepository.findStudentId(id).orElse(new Avatar());
     }
 
     private String getExtensions(String fileName) {

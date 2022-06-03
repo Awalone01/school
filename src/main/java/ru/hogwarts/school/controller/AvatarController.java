@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import ru.hogwarts.school.model.Avatar;
 import ru.hogwarts.school.service.impl.AvatarService;
 
@@ -27,11 +28,14 @@ public class AvatarController {
     }
 
     @PostMapping(value = "/{studentId}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> uploadAvatar(
-            @PathVariable Long studentId,
-            @RequestParam MultipartFile avatar) throws IOException {
-        avatarService.uploadAvatar(studentId, avatar);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> uploadAvatar(@PathVariable Long studentId,
+                                               @RequestParam MultipartFile avatar) {
+        try {
+            Long id = avatarService.uploadAvatar(studentId, avatar);
+            return ResponseEntity.ok("Successful upload, Id = " + id);
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to upload avatar", e);
+        }
     }
 
     @GetMapping(value = "/{id}/avatar-from-db")
@@ -46,7 +50,7 @@ public class AvatarController {
     @GetMapping(value = "/{id}/avatar-from-file")
     public void downloadAvatar(
             @PathVariable Long id,
-            HttpServletResponse response) throws IOException{
+            HttpServletResponse response) throws IOException {
         Avatar avatar = avatarService.findAvatar(id);
         Path path = Path.of(avatar.getFilePath());
 
