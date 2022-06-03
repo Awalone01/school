@@ -1,4 +1,4 @@
-package ru.hogwarts.school.service;
+package ru.hogwarts.school.service.impl;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,6 +11,7 @@ import javax.transaction.Transactional;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -21,10 +22,10 @@ public class AvatarService {
     @Value("${path.to.avatars.folder}")
     private String avatarsDir;
 
-    private final StudentService studentService;
+    private final StudentServiceImpl studentService;
     private final AvatarRepository avatarRepository;
 
-    public AvatarService(StudentService studentService, AvatarRepository avatarRepository) {
+    public AvatarService(StudentServiceImpl studentService, AvatarRepository avatarRepository) {
         this.studentService = studentService;
         this.avatarRepository = avatarRepository;
     }
@@ -32,7 +33,7 @@ public class AvatarService {
     public void uploadAvatar(Long studentId, MultipartFile avatarFile) throws IOException {
         Student student = studentService.findStudent(studentId);
         Path filePath = Path.of(avatarsDir, student + "." +
-                getExtensions(avatarFile.getOriginalFilename()));
+                getExtensions(Objects.requireNonNull(avatarFile.getOriginalFilename())));
 
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);

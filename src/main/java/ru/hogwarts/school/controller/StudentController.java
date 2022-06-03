@@ -5,20 +5,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.hogwarts.school.model.Student;
-import ru.hogwarts.school.service.AvatarService;
-import ru.hogwarts.school.service.StudentService;
+import ru.hogwarts.school.service.impl.AvatarService;
+import ru.hogwarts.school.service.impl.StudentServiceImpl;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
 @RequestMapping("student")
 public class StudentController {
 
-    private final StudentService studentService;
+    private final StudentServiceImpl studentService;
 
     private final AvatarService avatarService;
 
-    public StudentController(StudentService studentService, AvatarService avatarService) {
+    public StudentController(StudentServiceImpl studentService, AvatarService avatarService) {
         this.studentService = studentService;
         this.avatarService = avatarService;
     }
@@ -62,5 +63,21 @@ public class StudentController {
             @RequestParam(required = false) Integer min,
             @RequestParam(required = false) Integer max) {
         return studentService.findByAgeBetween(min, max);
+    }
+
+    @GetMapping("/count-students")
+    public int count() {
+        return studentService.countOfStudents();
+    }
+
+    @GetMapping("/AVG-age")
+    public double avgAge() {
+        return studentService.avgAge();
+    }
+
+    @GetMapping("last-five-students")
+    ResponseEntity<List<Student>> getLastFiveStudents() {
+        List<Student> lastFiveStudents = studentService.getLastFiveStudents();
+        return ResponseEntity.ok(lastFiveStudents);
     }
 }

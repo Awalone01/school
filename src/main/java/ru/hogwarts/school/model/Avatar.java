@@ -30,7 +30,6 @@ public class Avatar {
     }
 
     public Avatar() {
-
     }
 
     public Long getId() {
