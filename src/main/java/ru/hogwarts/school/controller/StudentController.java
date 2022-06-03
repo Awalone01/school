@@ -17,11 +17,8 @@ public class StudentController {
 
     private final StudentServiceImpl studentService;
 
-    private final AvatarService avatarService;
-
     public StudentController(StudentServiceImpl studentService, AvatarService avatarService) {
         this.studentService = studentService;
-        this.avatarService = avatarService;
     }
 
     @PostMapping
