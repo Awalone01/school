@@ -59,7 +59,7 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public Avatar findAvatar(Long id) {
-        return avatarRepository.findId(id).orElse(new Avatar());
+        return avatarRepository.findAvatarById(id).orElse(new Avatar());
     }
 
     private String getExtensions(String fileName) {
