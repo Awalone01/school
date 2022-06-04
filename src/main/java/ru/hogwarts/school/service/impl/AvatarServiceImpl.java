@@ -6,19 +6,17 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.model.Avatar;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.AvatarRepository;
+import ru.hogwarts.school.service.AvatarService;
 
 import javax.transaction.Transactional;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.Objects;
-
-import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
 @Transactional
-public class AvatarService {
+public class AvatarServiceImpl implements AvatarService {
 
     private static final int IMAGE_BLOCK_BUFFER_SIZE = 1024;
 
@@ -28,11 +26,12 @@ public class AvatarService {
     private final StudentServiceImpl studentService;
     private final AvatarRepository avatarRepository;
 
-    public AvatarService(StudentServiceImpl studentService, AvatarRepository avatarRepository) {
+    public AvatarServiceImpl(StudentServiceImpl studentService, AvatarRepository avatarRepository) {
         this.studentService = studentService;
         this.avatarRepository = avatarRepository;
     }
 
+    @Override
     public Long uploadAvatar(Long studentId, MultipartFile avatarFile) throws IOException {
         Student student = studentService.findStudent(studentId);
         Path filePath = Path.of(avatarsDir, student + "." +
@@ -58,8 +57,9 @@ public class AvatarService {
         return avatarRepository.save(avatar).getId();
     }
 
+    @Override
     public Avatar findAvatar(Long id) {
-        return avatarRepository.findStudentId(id).orElse(new Avatar());
+        return avatarRepository.findId(id).orElse(new Avatar());
     }
 
     private String getExtensions(String fileName) {

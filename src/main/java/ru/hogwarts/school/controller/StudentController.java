@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.hogwarts.school.model.Student;
-import ru.hogwarts.school.service.impl.AvatarService;
+import ru.hogwarts.school.service.impl.AvatarServiceImpl;
 import ru.hogwarts.school.service.impl.StudentServiceImpl;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public class StudentController {
 
     private final StudentServiceImpl studentService;
 
-    public StudentController(StudentServiceImpl studentService, AvatarService avatarService) {
+    public StudentController(StudentServiceImpl studentService, AvatarServiceImpl avatarService) {
         this.studentService = studentService;
     }
 
