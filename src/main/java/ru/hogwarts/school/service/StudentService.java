@@ -12,4 +12,9 @@ public interface StudentService {
 
     List<Student> getLastFiveStudents();
 
+    List<String> filterStudentsByFirstLetterInName();
+
+    Double getAverageAge();
+
+
 }

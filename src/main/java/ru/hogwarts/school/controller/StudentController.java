@@ -77,4 +77,15 @@ public class StudentController {
         List<Student> lastFiveStudents = studentService.getLastFiveStudents();
         return ResponseEntity.ok(lastFiveStudents);
     }
+
+    @GetMapping("/filterStudentsByFirstLetterInName")
+    public ResponseEntity<List<String>> filterStudentsByFirstLetterInName() {
+        List<String> filterStudents = studentService.filterStudentsByFirstLetterInName();
+        return ResponseEntity.ok(filterStudents);
+    }
+
+    @GetMapping("/filterByAvgAge")
+    public Double filterByAvgAge() {
+        return studentService.getAverageAge();
+    }
 }
