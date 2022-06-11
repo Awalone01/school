@@ -86,4 +86,11 @@ public class StudentServiceImpl implements StudentService {
                 .average()
                 .orElseThrow(NullPointerException::new);
     }
+
+    @Override
+    public void getParallelThread() {
+
+    }
+
+
 }
