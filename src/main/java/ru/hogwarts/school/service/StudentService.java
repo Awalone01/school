@@ -18,6 +18,8 @@ public interface StudentService {
 
     void getParallelThread();
 
+    void getSyncThread();
+
 
 
 }
