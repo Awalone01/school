@@ -4,8 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
-import ru.hogwarts.school.service.impl.FacultyService;
+import ru.hogwarts.school.service.FacultyService;
+import ru.hogwarts.school.service.impl.FacultyServiceImpl;
 
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -14,7 +16,7 @@ public class FacultyController {
 
     private final FacultyService facultyService;
 
-    public FacultyController(FacultyService facultyService) {
+    public FacultyController(FacultyServiceImpl facultyService) {
         this.facultyService = facultyService;
     }
 
@@ -55,5 +57,11 @@ public class FacultyController {
             return facultyService.getByColorIgnoreCase(color);
         }
         return facultyService.findByColorOrNameIgnoreCase(color, name);
+    }
+
+    @GetMapping("/theLongestFaculty'sName")
+    public Optional<String> theLongestFacultyName() {
+        return facultyService.theLongestNameOfFaculty();
+
     }
 }
