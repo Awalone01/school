@@ -12,4 +12,12 @@ public interface FacultyService {
     Set<Faculty> findByColorOrNameIgnoreCase(String color, String name);
 
     Optional<String> theLongestNameOfFaculty();
+
+    Faculty createFaculty(Faculty faculty);
+
+    Faculty editFaculty(Faculty faculty);
+
+    Faculty findFaculty(Long id);
+
+    void deleteFaculty(Long id);
 }
