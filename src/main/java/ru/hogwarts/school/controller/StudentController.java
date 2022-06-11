@@ -88,4 +88,14 @@ public class StudentController {
     public Double filterByAvgAge() {
         return studentService.getAverageAge();
     }
+
+    @GetMapping("/parallelThread")
+    public void getParallelThread() {
+        studentService.getParallelThread();
+    }
+
+    @GetMapping("/syncThread")
+    public void getSyncThread() {
+        studentService.getSyncThread();
+    }
 }

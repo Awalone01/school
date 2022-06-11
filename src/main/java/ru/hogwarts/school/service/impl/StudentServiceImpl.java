@@ -86,4 +86,43 @@ public class StudentServiceImpl implements StudentService {
                 .average()
                 .orElseThrow(NullPointerException::new);
     }
+
+    public void getParallelThread() {
+
+        getName(1L);
+        getName(2L);
+
+        new Thread(() -> {
+            getName(3L);
+            getName(4L);
+        }).start();
+
+        new Thread(() -> {
+            getName(5L);
+            getName(6L);
+        }).start();
+        }
+
+    public synchronized void getSyncThread() {
+
+        getName(1L);
+        getName(2L);
+
+        new Thread(() -> {
+            getName(3L);
+            getName(4L);
+        }).start();
+
+        new Thread(() -> {
+            getName(5L);
+            getName(6L);
+        }).start();
+    }
+
+    public void getName(Long id) {
+        String name = studentRepository.getById(id).getName();
+        System.out.println(name);
+    }
+
+
 }

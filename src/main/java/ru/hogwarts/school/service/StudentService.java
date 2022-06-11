@@ -16,5 +16,10 @@ public interface StudentService {
 
     Double getAverageAge();
 
+    void getParallelThread();
+
+    void getSyncThread();
+
+
 
 }
